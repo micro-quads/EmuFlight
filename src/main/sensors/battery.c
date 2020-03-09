@@ -57,7 +57,7 @@
  *
  */
 
-#define VBAT_STABLE_MAX_DELTA 20
+#define VBAT_STABLE_MAX_DELTA 10
 #define LVC_AFFECT_TIME 10000000 //10 secs for the LVC to slowly kick in
 
 // Battery monitoring stuff
@@ -185,8 +185,6 @@ static bool isVoltageFromBat(void)
 
 void batteryUpdatePresence(void)
 {
-
-
     if (
         (voltageState == BATTERY_NOT_PRESENT || voltageState == BATTERY_INIT) && isVoltageFromBat() && isVoltageStable()
     ) {
@@ -202,10 +200,7 @@ void batteryUpdatePresence(void)
                 cells = MAX_AUTO_DETECT_CELL_COUNT;
             }
             batteryCellCount = cells;
-
-            if (!ARMING_FLAG(ARMED)) {
-                changePidProfileFromCellCount(batteryCellCount);
-            }
+            changePidProfileFromCellCount(batteryCellCount);
         }
         batteryWarningVoltage = batteryCellCount * batteryConfig()->vbatwarningcellvoltage;
         batteryCriticalVoltage = batteryCellCount * batteryConfig()->vbatmincellvoltage;
