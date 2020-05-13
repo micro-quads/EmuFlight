@@ -831,6 +831,13 @@ const clivalue_t valueTable[] = {
     { "witchcraft_roll",            VAR_UINT8  | PROFILE_VALUE, .config.minmax = { 0, 10 }, PG_PID_PROFILE, offsetof(pidProfile_t, dFilter[ROLL].Wc) },
     { "witchcraft_pitch",           VAR_UINT8  | PROFILE_VALUE, .config.minmax = { 0, 10 }, PG_PID_PROFILE, offsetof(pidProfile_t, dFilter[PITCH].Wc) },
     { "witchcraft_yaw",             VAR_UINT8  | PROFILE_VALUE, .config.minmax = { 0, 10 }, PG_PID_PROFILE, offsetof(pidProfile_t, dFilter[YAW].Wc) },
+    { "dterm_imuf_roll_q",          VAR_UINT16 | PROFILE_VALUE, .config.minmax = { 0, 16000 }, PG_PID_PROFILE, offsetof(pidProfile_t, imuf_roll_q) },
+    { "dterm_imuf_pitch_q",         VAR_UINT16 | PROFILE_VALUE, .config.minmax = { 0, 16000 }, PG_PID_PROFILE, offsetof(pidProfile_t, imuf_pitch_q) },
+    { "dterm_imuf_yaw_q",           VAR_UINT16 | PROFILE_VALUE, .config.minmax = { 0, 16000 }, PG_PID_PROFILE, offsetof(pidProfile_t, imuf_yaw_q) },
+    { "dterm_imuf_w",               VAR_UINT16 | PROFILE_VALUE, .config.minmax = { 0, 16000 }, PG_PID_PROFILE, offsetof(pidProfile_t, imuf_w) },
+    { "dterm_imuf_sharpness",       VAR_UINT16 | PROFILE_VALUE, .config.minmax = { 0, 16000 }, PG_PID_PROFILE, offsetof(pidProfile_t, imuf_sharpness) },
+
+
     { "pid_at_min_throttle",        VAR_UINT8  | PROFILE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_OFF_ON }, PG_PID_PROFILE, offsetof(pidProfile_t, pidAtMinThrottle) },
     { "spa_roll_p",                 VAR_UINT8  | PROFILE_VALUE, .config.minmax = { 0, 250}, PG_PID_PROFILE, offsetof(pidProfile_t, setPointPTransition[ROLL]) },
     { "spa_roll_i",                 VAR_UINT8  | PROFILE_VALUE, .config.minmax = { 0, 250}, PG_PID_PROFILE, offsetof(pidProfile_t, setPointITransition[ROLL]) },
