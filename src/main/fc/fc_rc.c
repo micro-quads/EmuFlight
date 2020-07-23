@@ -241,6 +241,8 @@ static void scaleRcCommandToFpvCamAngle(void)
 #define THROTTLE_BUFFER_MAX 20
 #define THROTTLE_DELTA_MS 100
 
+<<<<<<< HEAD
+=======
 static void checkForThrottleErrorResetState(uint16_t rxRefreshRate)
 {
     currentRxRefreshRate = constrain(getTaskDeltaTime(TASK_RX),1000,20000);
@@ -250,6 +252,7 @@ static void checkForThrottleErrorResetState(uint16_t rxRefreshRate)
 
     const int rxRefreshRateMs = rxRefreshRate / 1000;
     const int indexMax = constrain(THROTTLE_DELTA_MS / rxRefreshRateMs, 1, THROTTLE_BUFFER_MAX);
+    const int16_t throttleVelocityThreshold = (feature(FEATURE_3D)) ? currentPidProfile->itermThrottleThreshold / 2 : currentPidProfile->itermThrottleThreshold;
 
     rcCommandThrottlePrevious[index++] = rcCommand[THROTTLE];
     if (index >= indexMax) {
@@ -257,8 +260,17 @@ static void checkForThrottleErrorResetState(uint16_t rxRefreshRate)
     }
 
     const int16_t rcCommandSpeed = rcCommand[THROTTLE] - rcCommandThrottlePrevious[index];
+
+    if (currentPidProfile->antiGravityMode == ANTI_GRAVITY_STEP) {
+        if (ABS(rcCommandSpeed) > throttleVelocityThreshold) {
+            pidSetItermAccelerator(CONVERT_PARAMETER_TO_FLOAT(currentPidProfile->itermAcceleratorGain));
+        } else {
+            pidSetItermAccelerator(1.0f);
+        }
+    }
 }
 
+>>>>>>> parent of 48a1cfe5d... Pidloop overhaul (#224)
 FAST_CODE uint8_t processRcInterpolation(void)
 {
     static FAST_RAM_ZERO_INIT float rcCommandInterp[4];
@@ -575,6 +587,10 @@ FAST_CODE uint8_t processRcSmoothingFilter(void)
 FAST_CODE void processRcCommand(void)
 {
     uint8_t updatedChannel;
+
+    if (isRXDataNew && pidAntiGravityEnabled()) {
+        checkForThrottleErrorResetState(currentRxRefreshRate);
+    }
 
     switch (rxConfig()->rc_smoothing_type) {
 #ifdef USE_RC_SMOOTHING_FILTER
